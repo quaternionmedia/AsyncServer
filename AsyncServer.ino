@@ -54,6 +54,15 @@ void setup() {
     request->send(response);
   });
 
+  AsyncCallbackJsonWebHandler* jhandler = new AsyncCallbackJsonWebHandler("/", [](AsyncWebServerRequest *request, JsonVariant &json) {
+    JsonObject jsonObj = json.as<JsonObject>();
+    for (uint8_t i=0; i<8; i++) {
+      dmx[i] = json["dmx"][i];
+    }
+    request->send(200, "OK");
+  });
+  server.addHandler(jhandler);
+
   server.on("/count", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(200, "text/plain", String(t++));
   });
