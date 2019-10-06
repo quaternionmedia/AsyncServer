@@ -51,6 +51,7 @@ void setup() {
     // request->send(200, "application/json", doc);
 
     serializeJson(doc, *response);
+    request->send(response);
   });
 
   server.on("/count", HTTP_GET, [](AsyncWebServerRequest *request) {
