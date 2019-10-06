@@ -56,8 +56,10 @@ void setup() {
 
   AsyncCallbackJsonWebHandler* jhandler = new AsyncCallbackJsonWebHandler("/", [](AsyncWebServerRequest *request, JsonVariant &json) {
     JsonObject jsonObj = json.as<JsonObject>();
-    for (uint8_t i=0; i<8; i++) {
-      dmx[i] = json["dmx"][i];
+    if (jsonObj.getMember("dmx")){
+      for (uint8_t i=0; i<8; i++) {
+        dmx[i] = json["dmx"][i];
+      }
     }
     request->send(200, "OK");
   });
@@ -68,8 +70,8 @@ void setup() {
   });
 
 
-   ws.onEvent(onWsEvent);
-   server.addHandler(&ws);
+  ws.onEvent(onWsEvent);
+  server.addHandler(&ws);
 
   server.begin();
 }
